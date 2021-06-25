@@ -1,0 +1,13 @@
+.body {
+  height: 100%;
+  width: 100%;
+}
+.body {
+  position: fixed;
+  align-items: stretch;
+}
+
+#root {
+  width: 100vh;
+  height: 100vh;
+}
