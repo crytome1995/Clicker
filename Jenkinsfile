@@ -9,7 +9,11 @@ parameters {
 
 def label="ai-platform-builds-${UUID.randomUUID().toString()}"
 
-podTemplate(label: label, containers: [
+podTemplate(label: label, 
+    volumes: [
+            hostPathVolume(hostPath: '/var/run/containerd/containerd.sock', mountPath: '/var/run/containerd/containerd.sock')
+    ]
+    containers: [
         containerTemplate(name: 'maven', image: 'maven:3.3.3', command:
                 '/bin/bash', args: '-c cat')
     ])
