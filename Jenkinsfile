@@ -15,7 +15,7 @@ podTemplate(label: label,
     ],
     containers: [
         containerTemplate(name: 'maven', image: 'maven:3.8.1-openjdk-8-slim', command:
-                '/bin/bash', args: 'sleep 9000')
+                '/bin/bash', args: '-c cat')
     ])
 
 {
