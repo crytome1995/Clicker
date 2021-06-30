@@ -14,7 +14,7 @@ podTemplate(label: label,
             hostPathVolume(hostPath: '/run/containerd/containerd.sock', mountPath: '/run/containerd/containerd.sock')
     ],
     containers: [
-        containerTemplate(name: 'maven', image: 'maven:3.3.3', command:
+        containerTemplate(name: 'maven', image: 'maven:3.8.1-openjdk-8-slim', command:
                 '/bin/bash', args: 'sleep 9000')
     ])
 
