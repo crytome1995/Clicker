@@ -11,8 +11,7 @@ def label="ai-platform-builds-${UUID.randomUUID().toString()}"
 
 podTemplate(label: label, containers: [
         containerTemplate(name: 'maven', image: ' maven:3.3.3', command:
-                '/bin/bash', args: '-c cat', envVars: [envVar(key: 'DOCKER_HOST', value:
-                'tcp://localhost:2375')])
+                '/bin/bash', args: '-c cat')
     ])
 
 {
