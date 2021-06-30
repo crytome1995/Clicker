@@ -10,11 +10,10 @@ parameters {
 def label="ai-platform-builds-${UUID.randomUUID().toString()}"
 
 podTemplate(label: label, containers: [
-        containerTemplate(name: 'maven', image: ' maven:3.3.3', ttyEnabled: true, command:
+        containerTemplate(name: 'maven', image: ' maven:3.3.3', command:
                 '/bin/bash', args: '-c cat', envVars: [envVar(key: 'DOCKER_HOST', value:
-                'tcp://localhost:2375')]),
-        containerTemplate(name: 'docker', image: 'docker:stable-dind', privileged: true, envVars:[envVar(key:'DOCKER_TLS_CERTDIR', value:'')])
-])
+                'tcp://localhost:2375')])
+    ])
 
 {
   timeout(time: 4, unit: 'HOURS') {
