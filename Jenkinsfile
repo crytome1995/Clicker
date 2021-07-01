@@ -14,7 +14,8 @@ podTemplate(label: label,
             hostPathVolume(hostPath: '/run/containerd/containerd.sock', mountPath: '/run/containerd/containerd.sock')
     ],
     containers: [
-        containerTemplate(name: 'node', image: 'node:10-alpine',ttyEnabled: true, command:'sleep')
+        containerTemplate(name: 'node', image: 'node:10-alpine',ttyEnabled: true, command:
+                '/bin/sh', args: '-c cat')
     ])
 
 {
