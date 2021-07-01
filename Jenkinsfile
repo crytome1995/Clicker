@@ -25,7 +25,7 @@ podTemplate(yaml: '''
         kubernetes.io/hostname: ip-10-0-2-202.ec2.internal      
 ''')
 {
-  timeout(time: 4, unit: 'HOURS') {
+  timeout(time: 1, unit: 'HOURS') {
     node(label) {
       stage ("Checkout SCM") {
         def scmVars = checkout scm
