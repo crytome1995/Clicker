@@ -56,7 +56,7 @@ podTemplate(label: label,
             def imageToPush = "${repoName}:${gitCommit}"
             sh "docker tag  ${repoName} ${imageToPush}"
             echo "Pushing image ${imageToPush}"
-            def pushStatus = sh scripts: "docker push ${imageToPush}"
+            def pushStatus = sh scripts: "docker push ${imageToPush}", returnStatus: true
             if (pushStatus != 0) {
               currentBuild.result = 'ABORTED'
               error('Failed to push image!')
