@@ -22,10 +22,10 @@ podTemplate(label: label,
   timeout(time: 4, unit: 'HOURS') {
     node(label) {
       stage ("Checkout SCM") {
-        checkout scm
+        def scmVars = checkout scm
         def lastCommit = sh script: 'git log -1 --pretty=%B', returnStdout: true
         echo ("last commit: ${lastCommit}")
-        echo ("commit HASH: ${GIT_COMMIT}")
+        echo ("commit HASH: ${scmVars.GIT_COMMIT}")
       }
 
       stage('Test project') {
