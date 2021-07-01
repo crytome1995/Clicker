@@ -45,7 +45,15 @@ podTemplate(label: label,
 
       stage('Build Project') {
         container('dind') {
-          sh 'docker build .'
+          def buildStatus = sh script: 'docker build .', returnStatus: true
+          if (buildStatus != 0) {
+            currentBuild.result = 'ABORTED'
+            error('Failed to build image!')
+          }
+          withCredentials([string(credentialsId: 'DOCKERHUB_USERNAME', variable: 'DOCKERHUB_USERNAME'),
+                            string(credentialsId: 'DOCKERHUB_ACCESS_TOKEN', variable: 'DOCKERHUB_ACCESS_TOKEN')]) {
+            sh 'docker login -u $DOCKERHUB_USERNAME -p $DOCKERHUB_ACCESS_TOKEN'
+          }
         }
       }
 
