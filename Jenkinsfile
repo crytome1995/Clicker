@@ -5,7 +5,7 @@ def label="clicker-${UUID.randomUUID().toString()}"
 def gitCommit 
 podTemplate(label: label, 
     volumes: [
-            hostPathVolume(hostPath: '/run/containerd/containerd.sock', mountPath: '/run/containerd/containerd.sock')
+            hostPathVolume(hostPath: '/var/run/docker.sock', mountPath: '/var/run/docker.sock')
     ],
     containers: [
         containerTemplate(name: 'node', image: 'node:10-alpine',ttyEnabled: true, command:
@@ -25,7 +25,7 @@ podTemplate(label: label,
 
       stage('Test project') {
         container('node') {
-            sh 'npm install'
+            sh 'npm ci'
             def passed = sh script: 'npm test a -- --coverage --coverageReporters="json-summary"', returnStatus: true
             if (passed != 0) {
                   currentBuild.result = 'ABORTED'
