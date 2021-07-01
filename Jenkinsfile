@@ -3,13 +3,27 @@
 
 def label="clicker-${UUID.randomUUID().toString()}"
 def gitCommit 
-podTemplate(label: label, 
-    containers: [
-        containerTemplate(name: 'node', image: 'node:10-alpine',ttyEnabled: true, command:
-                '/bin/sh', args: '-c cat'),
-        containerTemplate(name: 'dind', image: 'docker:20-dind',privileged: true, envVars: [envVar(key: 'DOCKER_TLS_CERTDIR', value: '')])
-    ])
-
+podTemplate(yaml: '''
+    apiVersion: v1
+    kind: Pod
+    spec:
+      containers:
+      - name: node
+        image: node:10-alpine
+        ttyEnabled: true
+        command:
+        - /bin/sh
+        args:
+        - -c cat
+      - name: dind
+        image: docker:20-dind
+        privileged: true
+        env:
+        - name: DOCKER_TLS_CERTDIR
+          value: ''
+      nodeSelector:
+        kubernetes.io/hostname: ip-10-0-2-202.ec2.internal      
+''')
 {
   timeout(time: 4, unit: 'HOURS') {
     node(label) {
