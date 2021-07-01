@@ -4,7 +4,7 @@
 def label="clicker-${UUID.randomUUID().toString()}"
 def gitCommit 
 podTemplate(label: label, 
-    nodeSelector: 'kubernetes.io/hostname: ip-10-0-3-168.ec2.internal'
+    nodeSelector: 'kubernetes.io/hostname: ip-10-0-3-168.ec2.internal',
     volumes: [
             hostPathVolume(hostPath: '/run/containerd/containerd.sock', mountPath: '/run/containerd/containerd.sock')
     ],
