@@ -30,6 +30,7 @@ podTemplate(label: label,
 
       stage('Test project') {
         container('node') {
+            sh 'npm install'
             def passed = sh script: 'npm test a -- --coverage --coverageReporters="json-summary"', returnStatus: true
             if (passed != 0) {
                   currentBuild.result = 'ABORTED'
