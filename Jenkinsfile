@@ -4,9 +4,6 @@
 def label="clicker-${UUID.randomUUID().toString()}"
 def gitCommit 
 podTemplate(label: label, 
-    volumes: [
-            hostPathVolume(hostPath: '/var/run/docker.sock', mountPath: '/var/run/docker.sock')
-    ],
     containers: [
         containerTemplate(name: 'node', image: 'node:10-alpine',ttyEnabled: true, command:
                 '/bin/sh', args: '-c cat'),
