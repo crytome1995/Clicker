@@ -42,7 +42,8 @@ podTemplate(label: label,
       stage('Coverage above 70%') {
         container('node') {
           sh 'apk add jq'
-          def coverage = sh script: 'cat /coverage/coverage-summary.json | jq \'.total.lines.pct\'', returnStdout: true
+          sh 'ls -la'
+          def coverage = sh script: 'cat coverage/coverage-summary.json | jq \'.total.lines.pct\'', returnStdout: true
           echo ("coverage: ${coverage}")
         }
       }
