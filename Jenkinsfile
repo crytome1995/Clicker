@@ -14,7 +14,7 @@ podTemplate(label: label,
             hostPathVolume(hostPath: '/run/containerd/containerd.sock', mountPath: '/run/containerd/containerd.sock')
     ],
     containers: [
-        containerTemplate(name: 'maven', image: 'maven:3.8.1-openjdk-8-slim',ttyEnabled: true, command:
+        containerTemplate(name: 'node', image: 'node:10-alpine',ttyEnabled: true, command:
                 '/bin/bash', args: '-c cat')
     ])
 
@@ -25,19 +25,30 @@ podTemplate(label: label,
         checkout scm
         def lastCommit = sh script: 'git log -1 --pretty=%B', returnStdout: true
         echo ("last commit: ${lastCommit}")
+        echo ("commit HASH: ${GIT_COMMIT}")
       }
 
-      stage('Build project') {
-        container('maven') {
-            sh 'mvn --version'
+      stage('Test project') {
+        container('node') {
+            def passed = sh script: 'npm test a -- --coverage --coverageReporters="json-summary"', returnStatus: true
+            if (passed != 0) {
+                  currentBuild.result = 'ABORTED'
+                  error('Failed unit tests!')
+            }
           }
         }
 
-
-      stage('Release maven project') {
-        echo(env.shouldBuild)
-        container('maven') {
+      stage('Coverage above 70%') {
+        container('node') {
+          sh 'apk add jq'
+          def coverage = sh script: 'cat /coverage/coverage-summary.json | jq \'.total.lines.pct\'', returnStdout: true
+          echo ("coverage: ${coverage}")
         }
+      }
+
+
+      stage('Release project') {
+
       }
 
     }
