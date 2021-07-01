@@ -43,7 +43,9 @@ podTemplate(label: label,
 
 
       stage('Build Project') {
-        sh 'docker build .'
+        container('dind') {
+          sh 'docker build .'
+        }
       }
 
     }
