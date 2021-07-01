@@ -4,7 +4,6 @@
 def label="clicker-${UUID.randomUUID().toString()}"
 def gitCommit 
 podTemplate(label: label, 
-    nodeSelector: 'kubernetes.io/hostname: ip-10-0-3-168.ec2.internal',
     volumes: [
             hostPathVolume(hostPath: '/run/containerd/containerd.sock', mountPath: '/run/containerd/containerd.sock')
     ],
@@ -21,7 +20,7 @@ podTemplate(label: label,
         def lastCommit = sh script: 'git log -1 --pretty=%B', returnStdout: true
         echo ("last commit: ${lastCommit}")
         echo ("commit HASH: ${scmVars.GIT_COMMIT}")
-        gitCommit = ${scmVars.GIT_COMMIT}
+        gitCommit = scmVars.GIT_COMMIT
       }
 
       stage('Test project') {
