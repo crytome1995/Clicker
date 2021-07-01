@@ -3,7 +3,7 @@
 
 def label="clicker-${UUID.randomUUID().toString()}"
 def gitCommit 
-
+def repoName = "ethanlebioda/clicker"
 podTemplate(label: label, 
     containers: [
         containerTemplate(name: 'node', image: 'node:10-alpine',ttyEnabled: true, command:
@@ -45,7 +45,7 @@ podTemplate(label: label,
 
       stage('Build Project') {
         container('dind') {
-          def buildStatus = sh script: 'docker build .', returnStatus: true
+          def buildStatus = sh script: "docker build -t ${repoName} .", returnStatus: true
           if (buildStatus != 0) {
             currentBuild.result = 'ABORTED'
             error('Failed to build image!')
@@ -53,6 +53,14 @@ podTemplate(label: label,
           withCredentials([string(credentialsId: 'DOCKERHUB_USERNAME', variable: 'DOCKERHUB_USERNAME'),
                             string(credentialsId: 'DOCKERHUB_ACCESS_TOKEN', variable: 'DOCKERHUB_ACCESS_TOKEN')]) {
             sh 'docker login -u $DOCKERHUB_USERNAME -p $DOCKERHUB_ACCESS_TOKEN'
+            def imageToPush = "${repoName}:${gitCommit}"
+            sh "docker tag  ${repoName} ${imageToPush}"
+            echo "Pushing image ${imageToPush}"
+            def pushStatus = sh scripts: "docker push ${imageToPush}"
+            if (pushStatus != 0) {
+              currentBuild.result = 'ABORTED'
+              error('Failed to push image!')
+            }
           }
         }
       }
