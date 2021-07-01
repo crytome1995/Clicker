@@ -6,6 +6,7 @@ def gitCommit
 podTemplate(yaml: '''
     apiVersion: v1
     kind: Pod
+    label: ${label}
     spec:
       containers:
       - name: node
