@@ -9,7 +9,6 @@ import {
 } from "react-router-dom";
 import Button from "./components/Button";
 import TotalClicks from "./components/TotalClicks";
-import { BrowserRouter } from "react-router-dom";
 
 const App = () => {
   // State
@@ -40,26 +39,24 @@ const App = () => {
 
   return (
     <AnimatePresence>
-      <BrowserRouter>
-        <Switch location={location} key={location.pathname}>
-          <Route
-            path="/total"
-            render={(props) => <TotalClicks countries={l} />}
-          />
-          <Route
-            path="/"
-            render={(props) => (
-              <Button
-                sendClick={sendClick}
-                history={history}
-                geoLocation={geoLocation}
-                pageTransition={pageTransition}
-                pageVariants={pageVariants}
-              />
-            )}
-          />
-        </Switch>
-      </BrowserRouter>
+      <Switch location={location} key={location.pathname}>
+        <Route
+          path="/total"
+          render={(props) => <TotalClicks countries={l} />}
+        />
+        <Route
+          path="/*"
+          render={(props) => (
+            <Button
+              sendClick={sendClick}
+              history={history}
+              geoLocation={geoLocation}
+              pageTransition={pageTransition}
+              pageVariants={pageVariants}
+            />
+          )}
+        />
+      </Switch>
     </AnimatePresence>
   );
 };
