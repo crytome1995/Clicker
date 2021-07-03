@@ -16,6 +16,6 @@ RUN npm run build
 # Stage 2
 FROM nginx:1.17.1-alpine
 
-EXPOSE 3000
+EXPOSE 80
 
 COPY --from=build-step /app/build /usr/share/nginx/html
