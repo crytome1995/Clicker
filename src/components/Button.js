@@ -8,6 +8,7 @@ const Button = (props) => {
   const history = props.history;
   const [clicked, setClicked] = useState(false);
   const handleClick = () => {
+    console.log("CLICKED!");
     setClicked(true);
     props.sendClick();
     // TODO: ADD API CALL to update button number and then get all button clicks

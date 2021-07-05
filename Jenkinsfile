@@ -4,6 +4,8 @@
 def label="clicker-${UUID.randomUUID().toString()}"
 def gitCommit 
 def repoName = "ethanlebioda/clicker"
+def dev = "dev"
+def main = "main"
 podTemplate(label: label, 
     containers: [
         containerTemplate(name: 'node', image: 'node:10-alpine',ttyEnabled: true, command:
@@ -64,6 +66,23 @@ podTemplate(label: label,
           }
         }
       }
+
+      stage('release to dev') {
+        withCredentials([usernamePassword(credentialsId: 'GITHUB_JENKINS', usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_TOKEN')]) {
+          def releasedDev = sh "scripts/release.sh ${dev} ${gitCommit}", returnStatus: true
+          if (releasedDev != 0) {
+            currentBuild.result = 'ABORTED'
+            error('Failed to release to dev!')
+          }
+        }
+
+      }
+
+      stage('E2E test') {
+
+      }
+
+      stage('release to prod')
 
     }
   }
