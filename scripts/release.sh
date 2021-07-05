@@ -1,4 +1,6 @@
 #!/bin/bash
+git config --global user.email ethan.lebioda@gmail.com
+git config --global user.name ${GIT_USERNAME}
 url="https://${GIT_USERNAME}:${GIT_TOKEN}@github.com/crytome1995/Charts.git"
 git remote add origin ${url}
 git clone --branch $1 https://github.com/crytome1995/Charts.git
