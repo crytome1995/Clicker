@@ -51,5 +51,11 @@
     "nodemon": "^2.0.7",
     "puppeteer": "^10.1.0",
     "riteway": "^6.2.1"
+  },
+  "jest": {
+    "collectCoverageFrom": [
+      "**/*.js",
+      "!src/e2e/*"
+    ]
   }
 }

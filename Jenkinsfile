@@ -69,7 +69,7 @@ podTemplate(label: label,
 
       stage('release to dev') {
         withCredentials([usernamePassword(credentialsId: 'GITHUB_JENKINS', usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_TOKEN')]) {
-          def releasedDev = sh "scripts/release.sh ${dev} ${gitCommit}", returnStatus: true
+          def releasedDev = sh script: "scripts/release.sh ${dev} ${gitCommit}", returnStatus: true
           if (releasedDev != 0) {
             currentBuild.result = 'ABORTED'
             error('Failed to release to dev!')
