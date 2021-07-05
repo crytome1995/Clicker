@@ -27,7 +27,7 @@ podTemplate(label: label,
       stage('Test project') {
         container('node') {
             sh 'npm ci --no-optional'
-            def passed = sh script: 'npm test a -- --coverage --coverageReporters="json-summary"', returnStatus: true
+            def passed = sh script: 'npm test a -- --testPathIgnorePatterns=src/e2e --coverage --coverageReporters="json-summary"', returnStatus: true
             if (passed != 0) {
                   currentBuild.result = 'ABORTED'
                   error('Failed unit tests!')
