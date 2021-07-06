@@ -14,7 +14,7 @@ podTemplate(label: label,
         containerTemplate(name: 'node', image: 'node:10-alpine',ttyEnabled: true, command:
                 '/bin/sh', args: '-c cat'),
         containerTemplate(name: 'dind', image: 'docker:20-dind',privileged: true, envVars: [envVar(key: 'DOCKER_TLS_CERTDIR', value: '')]),
-        containerTemplate(name: 'argo', image: 'argoproj/argocd-cli:v0.10.6', ttyEnabled: true, command: 'cat', args: '')
+        containerTemplate(name: 'argo', image: 'argoproj/argocli:v3.1.1', ttyEnabled: true, command: 'cat', args: '')
     ])
 
 {
@@ -81,7 +81,7 @@ podTemplate(label: label,
           }
           container('argo') {
             withCredentials([usernamePassword(credentialsId: 'ARGOCD', usernameVariable: 'ARGOCD_USERNAME', passwordVariable: 'ARGOCD_PASSWORD')]) {
-              sh '/argocd login argocd-server.argocd.svc.cluster.local --name $ARGOCD_USERNAME --password $ARGOCD_PASSWORD'
+              sh '/argocd login argocd-server.argocd.svc.cluster.local --plaintext --name $ARGOCD_USERNAME --password $ARGOCD_PASSWORD'
               sh "/argocd app sync ${argoApp}${dev}"
               sh "/argocd app wait ${argoApp}${dev} --timeout ${appWaitTimeout}"
             }
