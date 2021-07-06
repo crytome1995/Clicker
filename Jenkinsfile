@@ -10,7 +10,9 @@ podTemplate(label: label,
     containers: [
         containerTemplate(name: 'node', image: 'node:10-alpine',ttyEnabled: true, command:
                 '/bin/sh', args: '-c cat'),
-        containerTemplate(name: 'dind', image: 'docker:20-dind',privileged: true, envVars: [envVar(key: 'DOCKER_TLS_CERTDIR', value: '')])
+        containerTemplate(name: 'dind', image: 'docker:20-dind',privileged: true, envVars: [envVar(key: 'DOCKER_TLS_CERTDIR', value: ''),
+        containerTemplate(name: 'argocdcli', image: 'argoproj/argocd-cli',ttyEnabled: true)
+        ])
     ])
 
 {
@@ -22,6 +24,9 @@ podTemplate(label: label,
         echo ("last commit: ${lastCommit}")
         echo ("commit HASH: ${scmVars.GIT_COMMIT}")
         gitCommit = scmVars.GIT_COMMIT
+        sh 'curl -sSL -o /usr/local/bin/argocd https://github.com/argoproj/argo-cd/releases/latest/download/argocd-linux-amd64'
+        sh 'chmod +x /usr/local/bin/argocd'
+        sh 'argocd'
       }
 
       stage('Test project') {
@@ -75,6 +80,9 @@ podTemplate(label: label,
             currentBuild.result = 'ABORTED'
             error('Failed to release to dev!')
           }
+          sh 'curl -sSL -o /usr/local/bin/argocd https://github.com/argoproj/argo-cd/releases/latest/download/argocd-linux-amd64'
+          sh 'chmod +x /usr/local/bin/argocd'
+
         }
 
       }
