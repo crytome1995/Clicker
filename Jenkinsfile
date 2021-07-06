@@ -29,14 +29,6 @@ podTemplate(label: label,
       }
 
       stage('Test project') {
-          container('argo') {
-            withCredentials([usernamePassword(credentialsId: 'ARGOCD', usernameVariable: 'ARGOCD_USERNAME', passwordVariable: 'ARGOCD_PASSWORD')]) {
-              sh 'argocd'
-              sh 'argocd login argocd-server.argocd.svc.cluster.local --plaintext --name $ARGOCD_USERNAME --password $ARGOCD_PASSWORD'
-              sh "argocd app sync ${argoApp}${dev}"
-              sh "argocd app wait ${argoApp}${dev} --timeout ${appWaitTimeout}"
-            }
-        }       
         container('node') {
             sh 'npm ci --no-optional'
             def passed = sh script: 'npm test a -- --testPathIgnorePatterns=src/e2e --coverage --coverageReporters="json-summary"', returnStatus: true
@@ -87,19 +79,20 @@ podTemplate(label: label,
             currentBuild.result = 'ABORTED'
             error('Failed to release to dev!')
           }
+          container('argo') {
             withCredentials([usernamePassword(credentialsId: 'ARGOCD', usernameVariable: 'ARGOCD_USERNAME', passwordVariable: 'ARGOCD_PASSWORD')]) {
-              sh 'argo login argocd-server.argocd.svc.cluster.local --plaintext --name $ARGOCD_USERNAME --password $ARGOCD_PASSWORD'
-              sh "argo app sync ${argoApp}${dev}"
-              sh "argo app wait ${argoApp}${dev} --timeout ${appWaitTimeout}"
+              sh 'argocd login argocd-server.argocd.svc.cluster.local --insecure --plaintext --username $ARGOCD_USERNAME --password $ARGOCD_PASSWORD'
+              sh "argocd app sync ${argoApp}${dev}"
+              sh "argocd app wait ${argoApp}${dev} --timeout ${appWaitTimeout}"
             }
-          
-
+          }
         }
-
       }
 
       stage('E2E test') {
-
+        container('node') {
+          sh 'npm run tests src/e2e'
+        }
       }
 
       stage('release to prod')
