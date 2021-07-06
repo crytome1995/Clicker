@@ -6,11 +6,15 @@ def gitCommit
 def repoName = "ethanlebioda/clicker"
 def dev = "dev"
 def main = "main"
+def argoApp = "clicker-"
+def appWaitTimeout = 600
+
 podTemplate(label: label, 
     containers: [
         containerTemplate(name: 'node', image: 'node:10-alpine',ttyEnabled: true, command:
                 '/bin/sh', args: '-c cat'),
-        containerTemplate(name: 'dind', image: 'docker:20-dind',privileged: true, envVars: [envVar(key: 'DOCKER_TLS_CERTDIR', value: '')
+        containerTemplate(name: 'dind', image: 'docker:20-dind',privileged: true, envVars: [envVar(key: 'DOCKER_TLS_CERTDIR', value: ''),
+        containerTemplate(name: 'argo', image: 'argoproj/argocd-cli:v0.10.6', ttyEnabled: true, command: 'cat', args: '')
         ])
     ])
 
@@ -23,9 +27,6 @@ podTemplate(label: label,
         echo ("last commit: ${lastCommit}")
         echo ("commit HASH: ${scmVars.GIT_COMMIT}")
         gitCommit = scmVars.GIT_COMMIT
-        sh 'curl -sSL -o /usr/local/bin/argocd https://github.com/argoproj/argo-cd/releases/latest/download/argocd-linux-amd64'
-        sh 'chmod +x /usr/local/bin/argocd'
-        sh 'argocd'
       }
 
       stage('Test project') {
@@ -79,8 +80,13 @@ podTemplate(label: label,
             currentBuild.result = 'ABORTED'
             error('Failed to release to dev!')
           }
-          sh 'curl -sSL -o /usr/local/bin/argocd https://github.com/argoproj/argo-cd/releases/latest/download/argocd-linux-amd64'
-          sh 'chmod +x /usr/local/bin/argocd'
+          container('argo') {
+            withCredentials([usernamePassword(credentialsId: 'ARGOCD', usernameVariable: 'ARGOCD_USERNAME', passwordVariable: 'ARGOCD_PASSWORD')]) {
+              sh '/argocd login argocd-server.argocd.svc.cluster.local --name $ARGOCD_USERNAME --password $ARGOCD_PASSWORD'
+              sh "/argocd app sync ${argoApp}${dev}"
+              sh "/argocd app wait ${argoApp}${dev} --timeout ${appWaitTimeout}"
+            }
+          }
 
         }
 
