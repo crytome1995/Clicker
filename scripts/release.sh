@@ -14,6 +14,7 @@ release_dev () {
 }
 
 release_prod () {
+    cd Charts
     git checkout $1
     echo "releasing tag to main $2"
     git pull
