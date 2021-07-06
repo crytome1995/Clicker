@@ -3,7 +3,6 @@ git config --global user.email ethan.lebioda@gmail.com
 git config --global user.name ${GIT_USERNAME}
 url="https://${GIT_USERNAME}:${GIT_TOKEN}@github.com/crytome1995/Charts.git"
 git remote add origin ${url}
-git clone --branch $1 https://github.com/crytome1995/Charts.git
 
 release_dev () {
     cd Charts/clicker
@@ -24,6 +23,7 @@ release_prod () {
 
 case "$1" in
     "dev")
+        git clone --branch $1 https://github.com/crytome1995/Charts.git
         release_dev $1 $2
         ;;
     "main")
