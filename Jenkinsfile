@@ -36,9 +36,7 @@ podTemplate(label: label,
               sh "argocd app sync ${argoApp}${dev}"
               sh "argocd app wait ${argoApp}${dev} --timeout ${appWaitTimeout}"
             }
-        }
-      }
-          
+        }       
         container('node') {
             sh 'npm ci --no-optional'
             def passed = sh script: 'npm test a -- --testPathIgnorePatterns=src/e2e --coverage --coverageReporters="json-summary"', returnStatus: true
