@@ -94,12 +94,22 @@ podTemplate(label: label,
         container('node') {
           sh 'chmod +x scripts/setup-puppeter.sh'
           sh 'scripts/setup-puppeter.sh'
-          sh 'npm test src/e2e'
+          def uiTestStatus = sh script:'npm test src/e2e', returnStatus: true
+          if (uiTestStatus != 0) {
+            currentBuild.result = 'ABORTED'
+            error('End to end tests failed!')
+          }
         }
       }
 
-      stage('release to prod')
-
+      stage('release to prod') {
+        withCredentials([usernamePassword(credentialsId: 'GITHUB_JENKINS', usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_TOKEN')]) {
+          def releaseProd = sh script: "scripts/release.sh ${main} ${gitCommit}", returnStatus: true
+          if (releaseProd != 0) {
+            currentBuild.result = 'ABORTED'
+            error('Failed to release to prod!')
+          }
+      }
     }
   }
 }
