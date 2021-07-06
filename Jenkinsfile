@@ -109,6 +109,7 @@ podTemplate(label: label,
             currentBuild.result = 'ABORTED'
             error('Failed to release to prod!')
           }
+        }
       }
     }
   }
