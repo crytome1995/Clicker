@@ -12,5 +12,3 @@ apk add --no-cache \
 
 PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true \
     PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium-browser
-
-yarn add puppeteer@6.0.0
