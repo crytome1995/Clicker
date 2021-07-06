@@ -29,7 +29,7 @@ podTemplate(label: label,
       stage('Test project') {
           
             withCredentials([usernamePassword(credentialsId: 'ARGOCD', usernameVariable: 'ARGOCD_USERNAME', passwordVariable: 'ARGOCD_PASSWORD')]) {
-              sh "curl -o /usr/local/bin/argocd https://${argocdServer}/download/argocd-linux-amd64"
+              sh "curl -k -o /usr/local/bin/argocd https://${argocdServer}/download/argocd-linux-amd64"
               sh 'argocd'
               sh 'argocd login argocd-server.argocd.svc.cluster.local --plaintext --name $ARGOCD_USERNAME --password $ARGOCD_PASSWORD'
               sh "argocd app sync ${argoApp}${dev}"
