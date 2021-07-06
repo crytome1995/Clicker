@@ -110,6 +110,13 @@ podTemplate(label: label,
             error('Failed to release to prod!')
           }
         }
+        container('argo') {
+          withCredentials([usernamePassword(credentialsId: 'ARGOCD', usernameVariable: 'ARGOCD_USERNAME', passwordVariable: 'ARGOCD_PASSWORD')]) {
+            sh 'argocd login argocd-server.argocd.svc.cluster.local --insecure --plaintext --username $ARGOCD_USERNAME --password $ARGOCD_PASSWORD'
+            sh "argocd app sync ${argoApp}prod"
+            sh "argocd app wait ${argoApp}prod --timeout ${appWaitTimeout}"
+          }
+        }
       }
     }
   }
