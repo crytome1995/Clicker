@@ -27,11 +27,6 @@ podTemplate(label: label,
         echo ("last commit: ${lastCommit}")
         echo ("commit HASH: ${scmVars.GIT_COMMIT}")
         gitCommit = scmVars.GIT_COMMIT
-                      container('node') {
-          sh 'chmod +x scripts/setup-puppeter.sh'
-          sh 'scripts/setup-puppeter.sh'
-          sh 'npm test src/e2e'
-        }
       }
 
       stage('Test project') {
