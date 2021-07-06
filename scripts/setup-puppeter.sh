@@ -9,6 +9,3 @@ apk add --no-cache \
       ttf-freefont \
       nodejs \
       yarn
-
-PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true \
-    PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium-browser

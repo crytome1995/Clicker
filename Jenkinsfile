@@ -12,7 +12,7 @@ def argocdServer = "argocd-server.argocd.svc.cluster.local"
 podTemplate(label: label, 
     containers: [
         containerTemplate(name: 'node', image: 'node:10-alpine',ttyEnabled: true, command:
-                '/bin/sh', args: '-c cat'),
+                '/bin/sh', args: '-c cat',envVars: [envVar(key: 'PUPPETEER_SKIP_CHROMIUM_DOWNLOAD', value: 'true'), envVar(key: 'PUPPETEER_EXECUTABLE_PATH', value: '/usr/bin/chromium-browser')]),
         containerTemplate(name: 'dind', image: 'docker:20-dind',privileged: true, envVars: [envVar(key: 'DOCKER_TLS_CERTDIR', value: '')]),
         containerTemplate(name: 'argo', image: 'ethanlebioda/argocli-sleep:1.0.0',ttyEnabled: true)
     ])
