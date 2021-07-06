@@ -13,9 +13,7 @@ podTemplate(label: label,
     containers: [
         containerTemplate(name: 'node', image: 'node:10-alpine',ttyEnabled: true, command:
                 '/bin/sh', args: '-c cat'),
-        containerTemplate(name: 'dind', image: 'docker:20-dind',privileged: true, envVars: [envVar(key: 'DOCKER_TLS_CERTDIR', value: '')]),
-        containerTemplate(name: 'argo', image: 'argoproj/argocd:v2.0.4', ttyEnabled: true, command: 'cat')
-    ])
+        containerTemplate(name: 'dind', image: 'docker:20-dind',privileged: true, envVars: [envVar(key: 'DOCKER_TLS_CERTDIR', value: '')])    ])
 
 {
   timeout(time: 4, unit: 'HOURS') {
@@ -29,14 +27,15 @@ podTemplate(label: label,
       }
 
       stage('Test project') {
-          container('argo') {
+          
             withCredentials([usernamePassword(credentialsId: 'ARGOCD', usernameVariable: 'ARGOCD_USERNAME', passwordVariable: 'ARGOCD_PASSWORD')]) {
+              sh 'curl -sSL -o /usr/local/bin/argocd https://${ARGOCD_SERVER}/download/argocd-linux-amd64'
               sh 'argocd'
               sh 'argocd login argocd-server.argocd.svc.cluster.local --plaintext --name $ARGOCD_USERNAME --password $ARGOCD_PASSWORD'
               sh "argocd app sync ${argoApp}${dev}"
               sh "argocd app wait ${argoApp}${dev} --timeout ${appWaitTimeout}"
             }
-          }
+          
         container('node') {
             sh 'npm ci --no-optional'
             def passed = sh script: 'npm test a -- --testPathIgnorePatterns=src/e2e --coverage --coverageReporters="json-summary"', returnStatus: true
@@ -87,13 +86,12 @@ podTemplate(label: label,
             currentBuild.result = 'ABORTED'
             error('Failed to release to dev!')
           }
-          container('argo') {
             withCredentials([usernamePassword(credentialsId: 'ARGOCD', usernameVariable: 'ARGOCD_USERNAME', passwordVariable: 'ARGOCD_PASSWORD')]) {
               sh 'argo login argocd-server.argocd.svc.cluster.local --plaintext --name $ARGOCD_USERNAME --password $ARGOCD_PASSWORD'
               sh "argo app sync ${argoApp}${dev}"
               sh "argo app wait ${argoApp}${dev} --timeout ${appWaitTimeout}"
             }
-          }
+          
 
         }
 
