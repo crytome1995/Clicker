@@ -17,6 +17,7 @@ release_dev () {
 release_prod () {
     git checkout $1
     echo "releasing tag to main $2"
+    git pull
     git merge dev
     git push ${url} $1
 }
