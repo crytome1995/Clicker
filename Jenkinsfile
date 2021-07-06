@@ -81,9 +81,9 @@ podTemplate(label: label,
           }
           container('argo') {
             withCredentials([usernamePassword(credentialsId: 'ARGOCD', usernameVariable: 'ARGOCD_USERNAME', passwordVariable: 'ARGOCD_PASSWORD')]) {
-              sh '/argo login argocd-server.argocd.svc.cluster.local --plaintext --name $ARGOCD_USERNAME --password $ARGOCD_PASSWORD'
-              sh "/argo app sync ${argoApp}${dev}"
-              sh "/argo app wait ${argoApp}${dev} --timeout ${appWaitTimeout}"
+              sh 'argo login argocd-server.argocd.svc.cluster.local --plaintext --name $ARGOCD_USERNAME --password $ARGOCD_PASSWORD'
+              sh "argo app sync ${argoApp}${dev}"
+              sh "argo app wait ${argoApp}${dev} --timeout ${appWaitTimeout}"
             }
           }
 
