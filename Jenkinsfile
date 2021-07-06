@@ -20,17 +20,18 @@ podTemplate(label: label,
 {
   timeout(time: 4, unit: 'HOURS') {
     node(label) {
-              container('node') {
-          sh 'chmod +x scripts/setup-puppeter.sh'
-          sh 'scripts/setup-puppeter.sh'
-          sh 'npm test src/e2e'
-        }
+
       stage ("Checkout SCM") {
         def scmVars = checkout scm
         def lastCommit = sh script: 'git log -1 --pretty=%B', returnStdout: true
         echo ("last commit: ${lastCommit}")
         echo ("commit HASH: ${scmVars.GIT_COMMIT}")
         gitCommit = scmVars.GIT_COMMIT
+                      container('node') {
+          sh 'chmod +x scripts/setup-puppeter.sh'
+          sh 'scripts/setup-puppeter.sh'
+          sh 'npm test src/e2e'
+        }
       }
 
       stage('Test project') {
