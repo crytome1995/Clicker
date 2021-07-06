@@ -5,6 +5,7 @@ describe("Press Me Button", () => {
   test("Button loads and is clickable", async () => {
     let browser = await puppeteer.launch({
       headless: true,
+      args: ["--no-sandbox", "--disable-setuid-sandbox"],
     });
     let page = await browser.newPage();
 
