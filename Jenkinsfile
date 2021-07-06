@@ -14,7 +14,7 @@ podTemplate(label: label,
         containerTemplate(name: 'node', image: 'node:10-alpine',ttyEnabled: true, command:
                 '/bin/sh', args: '-c cat'),
         containerTemplate(name: 'dind', image: 'docker:20-dind',privileged: true, envVars: [envVar(key: 'DOCKER_TLS_CERTDIR', value: '')]),
-        containerTemplate(name: 'argo', image: 'argoproj/argocd:v2.0.4', ttyEnabled: true)
+        containerTemplate(name: 'argo', image: 'argoproj/argocd:v2.0.4', ttyEnabled: true, command: 'cat')
     ])
 
 {
