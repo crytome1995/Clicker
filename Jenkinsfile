@@ -8,7 +8,7 @@ def dev = "dev"
 def main = "main"
 def argoApp = "clicker-"
 def appWaitTimeout = 600
-
+def argocdServer = "argocd-server.argocd.svc.cluster.local"
 podTemplate(label: label, 
     containers: [
         containerTemplate(name: 'node', image: 'node:10-alpine',ttyEnabled: true, command:
@@ -29,7 +29,7 @@ podTemplate(label: label,
       stage('Test project') {
           
             withCredentials([usernamePassword(credentialsId: 'ARGOCD', usernameVariable: 'ARGOCD_USERNAME', passwordVariable: 'ARGOCD_PASSWORD')]) {
-              sh 'curl -sSL -o /usr/local/bin/argocd https://${ARGOCD_SERVER}/download/argocd-linux-amd64'
+              sh "curl -o /usr/local/bin/argocd https://${argocdServer}/download/argocd-linux-amd64"
               sh 'argocd'
               sh 'argocd login argocd-server.argocd.svc.cluster.local --plaintext --name $ARGOCD_USERNAME --password $ARGOCD_PASSWORD'
               sh "argocd app sync ${argoApp}${dev}"
