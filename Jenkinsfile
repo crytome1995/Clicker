@@ -91,7 +91,7 @@ podTemplate(label: label,
 
       stage('E2E test') {
         container('node') {
-          sh 'npm run tests src/e2e'
+          sh 'npm test src/e2e'
         }
       }
 

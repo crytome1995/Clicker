@@ -16,7 +16,7 @@ describe("Press Me Button", () => {
       userAgent: "",
     });
 
-    await page.goto("http://http://click.control.clickthebutton.click/");
+    await page.goto("http://click.control.clickthebutton.click/");
     await page.waitForSelector(".button");
     await page.waitFor(2000);
     await Promise.all([
