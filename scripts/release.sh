@@ -15,10 +15,11 @@ release_dev () {
 
 release_prod () {
     cd Charts
-    git checkout $1
     echo "releasing tag to main $2"
-    git pull
-    git merge dev
+    commit_id=$(git rev-parse HEAD)
+    git checkout $1
+    git fetch
+    git cherry-pick --strategy=recursive -X theirs ${commit_id}
     git push ${url} $1
 }
 
