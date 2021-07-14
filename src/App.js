@@ -10,6 +10,7 @@ import {
 import Button from "./components/Button";
 import TotalClicks from "./components/TotalClicks";
 import { sendClick } from "./components/ApiClient";
+import { getSendClickURL, getGetClicksURL } from "./Config";
 
 const App = () => {
   // State
@@ -28,7 +29,7 @@ const App = () => {
 
   const location = useLocation();
   const history = useHistory();
-  const sendClickURL = process.env.REACT_APP_SEND_CLICK_URL;
+  console.log(getSendClickURL());
   const country = {
     countryCode: "US",
     count: 1020,
@@ -46,7 +47,7 @@ const App = () => {
           path="/*"
           render={(props) => (
             <Button
-              sendClickURL={sendClickURL}
+              sendClickURL={getSendClickURL()}
               sendClick={sendClick}
               history={history}
               geoLocation={geoLocation}

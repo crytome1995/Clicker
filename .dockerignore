@@ -3,3 +3,7 @@
 .git
 *.md
 .gitignore
+**/*.test.js
+/src/e2e
+jenkinsfile
+/scripts

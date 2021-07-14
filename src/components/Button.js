@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import "./Button.css";
-import { Link, useHistory } from "react-router-dom";
 import { motion } from "framer-motion";
 import Spinner from "react-bootstrap/Spinner";
 
@@ -9,6 +8,7 @@ const Button = (props) => {
   const [clicked, setClicked] = useState(false);
   const handleClick = async () => {
     setClicked(true);
+    console.log(props.sendClickURL);
     try {
       // Set URL from state passed by config TODO
       let response = await props.sendClick(

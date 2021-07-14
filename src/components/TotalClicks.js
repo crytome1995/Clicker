@@ -1,5 +1,3 @@
-import Container from "react-bootstrap/Container";
-import { Grid, Row, Col } from "react-bootstrap";
 import "./TotalClicks.css";
 import ReactCountryFlag from "react-country-flag";
 

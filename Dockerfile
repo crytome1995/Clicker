@@ -1,5 +1,7 @@
 # Step 1
-FROM node:10-alpine as build-step
+FROM node:10-alpine
+
+EXPOSE 3000
 
 RUN mkdir /app
 
@@ -11,12 +13,6 @@ RUN npm install
 
 COPY . /app
 
-RUN npm run build
+ENTRYPOINT ["npm"]
 
-
-# Stage 2
-FROM nginx:1.17.1-alpine
-
-EXPOSE 80
-
-COPY --from=build-step /app/build /usr/share/nginx/html
+CMD ["start"]
