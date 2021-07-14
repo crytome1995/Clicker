@@ -9,6 +9,7 @@ import {
 } from "react-router-dom";
 import Button from "./components/Button";
 import TotalClicks from "./components/TotalClicks";
+import { sendClick } from "./components/ApiClient";
 
 const App = () => {
   // State
@@ -32,10 +33,6 @@ const App = () => {
     count: 1020,
   };
   const l = [country];
-  const sendClick = async () => {
-    const response = await fetch("https://ip.nf/me.json");
-    const data = await response.json();
-  };
 
   return (
     <AnimatePresence>

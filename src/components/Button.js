@@ -7,12 +7,29 @@ import Spinner from "react-bootstrap/Spinner";
 const Button = (props) => {
   const history = props.history;
   const [clicked, setClicked] = useState(false);
-  const handleClick = () => {
-    console.log("CLICKED!");
+  const handleClick = async () => {
     setClicked(true);
-    props.sendClick();
-    // TODO: ADD API CALL to update button number and then get all button clicks
-    history.push("/total");
+    try {
+      // Set URL from state passed by config TODO
+      let response = await props.sendClick(
+        props.sendClickURL,
+        props.geoLocation.country_code,
+        props.geoLocation.ip
+      );
+      let message = await response.json();
+      if (!response.ok) {
+        throw Error(`Failed to send click ${message}`);
+      } else {
+        console.log(
+          `Sent click for ${props.geoLocation.country_code} ip ${props.geoLocation.ip}`
+        );
+        history.push("/total");
+      }
+    } catch (error) {
+      console.warn(`Failed to send click due to ${error}`);
+      setClicked(false);
+      alert("Please try again!");
+    }
   };
   return (
     <motion.div

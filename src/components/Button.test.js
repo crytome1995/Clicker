@@ -21,8 +21,24 @@ describe("Button click", () => {
     // how to mock an object
     const historyMock = { push: jest.fn() };
     const apiMock = jest.fn();
-
-    const wrapper = shallow(<B history={historyMock} sendClick={apiMock}></B>);
+    const response = { message: "ok" };
+    var myBlob = new Blob([JSON.stringify(response, null, 2)], {
+      type: "application/json",
+    });
+    const geoLocation = {
+      country_code: "US",
+      ip: "123.123.123.123",
+    };
+    var init = { status: 200, js: "ok" };
+    var myResponse = new Response(myBlob, init);
+    apiMock.mockReturnValueOnce(myResponse);
+    const wrapper = shallow(
+      <B
+        history={historyMock}
+        geoLocation={geoLocation}
+        sendClick={apiMock}
+      ></B>
+    );
     const button = wrapper.find("button");
     button.props().onClick();
 
