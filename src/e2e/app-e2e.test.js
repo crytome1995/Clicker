@@ -1,6 +1,8 @@
 const faker = require("faker");
 const puppeteer = require("puppeteer");
 
+jest.retryTimes(3);
+
 describe("Press Me Button", () => {
   test("Button loads and is clickable", async () => {
     let browser = await puppeteer.launch({
@@ -17,9 +19,10 @@ describe("Press Me Button", () => {
       userAgent: "",
     });
 
-    await page.goto("http://click.control.clickthebutton.click/");
+    await page.goto("http://click.control.clickthebutton.click/", {
+      waitUntil: "networkidle2",
+    });
     await page.waitForSelector(".button");
-    await page.waitFor(2000);
     await Promise.all([
       page.click("button"),
       page.waitForNavigation({ waitUntil: "networkidle2" }),

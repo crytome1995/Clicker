@@ -47,3 +47,35 @@ describe("Button click", () => {
     expect(wrapper.exists("span")).toBe(true);
   });
 });
+
+describe("Button click failure", () => {
+  it("should be clicked to false, should have called api, and failed", async () => {
+    // how to mock an object
+    const historyMock = { push: jest.fn() };
+    const apiMock = jest.fn();
+    const response = { message: "ok" };
+    var myBlob = new Blob([JSON.stringify(response, null, 2)], {
+      type: "application/json",
+    });
+    const geoLocation = {
+      country_code: "US",
+      ip: "123.123.123.123",
+    };
+    var init = { status: 400, js: "bad request" };
+    var myResponse = new Response(myBlob, init);
+    apiMock.mockReturnValueOnce(myResponse);
+    const wrapper = shallow(
+      <B
+        history={historyMock}
+        geoLocation={geoLocation}
+        sendClick={apiMock}
+      ></B>
+    );
+    const button = wrapper.find("button");
+    await button.props().onClick();
+
+    expect(wrapper.find("button").props()["disabled"]).toBe(false);
+    expect(apiMock).toHaveBeenCalledTimes(1);
+    expect(wrapper.exists("span")).toBe(false);
+  });
+});

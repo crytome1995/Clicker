@@ -94,7 +94,7 @@ podTemplate(label: label,
         container('node') {
           sh 'chmod +x scripts/setup-puppeter.sh'
           sh 'scripts/setup-puppeter.sh'
-          def uiTestStatus = sh script:'npm test src/e2e', returnStatus: true
+          def uiTestStatus = sh script:'npm test src/e2e --forceExit', returnStatus: true
           if (uiTestStatus != 0) {
             currentBuild.result = 'ABORTED'
             error('End to end tests failed!')
