@@ -52,7 +52,7 @@ podTemplate(label: label,
 
       stage('Build Project dev') {
         container('dind') {
-          def buildStatus = sh script: "docker build -t ${repoName} Dockerfile.dev .", returnStatus: true
+          def buildStatus = sh script: "docker build -t ${repoName} -f Dockerfile.dev .", returnStatus: true
           if (buildStatus != 0) {
             currentBuild.result = 'ABORTED'
             error('Failed to build image!')
@@ -104,7 +104,7 @@ podTemplate(label: label,
 
       stage('Build Project prod') {
         container('dind') {
-          def buildStatus = sh script: "docker build -t ${repoName} Dockerfile.prod .", returnStatus: true
+          def buildStatus = sh script: "docker build -t ${repoName} -f Dockerfile.prod .", returnStatus: true
           if (buildStatus != 0) {
             currentBuild.result = 'ABORTED'
             error('Failed to build image!')
