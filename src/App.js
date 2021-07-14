@@ -29,7 +29,6 @@ const App = () => {
 
   const location = useLocation();
   const history = useHistory();
-  console.log(getSendClickURL());
   const country = {
     countryCode: "US",
     count: 1020,

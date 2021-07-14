@@ -8,7 +8,6 @@ const Button = (props) => {
   const [clicked, setClicked] = useState(false);
   const handleClick = async () => {
     setClicked(true);
-    console.log(props.sendClickURL);
     try {
       // Set URL from state passed by config TODO
       let response = await props.sendClick(

@@ -5,5 +5,5 @@
 .gitignore
 **/*.test.js
 /src/e2e
-jenkinsfile
+Jenkinsfile
 /scripts
