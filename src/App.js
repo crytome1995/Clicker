@@ -28,6 +28,7 @@ const App = () => {
 
   const location = useLocation();
   const history = useHistory();
+  const sendClickURL = process.env.REACT_APP_SEND_CLICK_URL;
   const country = {
     countryCode: "US",
     count: 1020,
@@ -45,6 +46,7 @@ const App = () => {
           path="/*"
           render={(props) => (
             <Button
+              sendClickURL={sendClickURL}
               sendClick={sendClick}
               history={history}
               geoLocation={geoLocation}

@@ -5,6 +5,8 @@ RUN mkdir /app
 
 WORKDIR /app
 
+ENV REACT_APP_SEND_CLICK_URL 
+
 COPY package.json /app
 
 RUN npm install
