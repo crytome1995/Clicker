@@ -15,3 +15,12 @@ export async function sendClick(url, country, ip) {
     }),
   });
 }
+
+export async function getClicks(url) {
+  return fetch(url, {
+    method: "GET",
+    headers: {
+      accept: "application/json",
+    },
+  });
+}

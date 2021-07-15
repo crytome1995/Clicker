@@ -1,9 +1,4 @@
-function getEnv() {
-  return process.env.NODE_ENV;
-}
-
-const getSendClickURL = () => {
-  const env = getEnv();
+const getSendClickURL = (env) => {
   if (env === "development" || env === "test") {
     return process.env.REACT_APP_DEV_SEND_CLICK_URL;
   } else if (env === "production") {
@@ -13,8 +8,7 @@ const getSendClickURL = () => {
   }
 };
 
-const getGetClicksURL = () => {
-  const env = getEnv();
+const getGetClicksURL = (env) => {
   if (env === "development" || env === "test") {
     return process.env.REACT_APP_DEV_GET_CLICKS_URL;
   } else if (env === "production") {
